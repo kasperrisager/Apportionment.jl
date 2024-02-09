@@ -15,5 +15,3 @@ end
 function apportion(entitlements::Vector{<:Union{Integer, Rational}}, lr::LargestRemainders)
     return apportion_quotas(entitlements // sum(entitlements) * lr.total_items, lr, ShuffleTieBreaker())
 end
-
-export LargestRemainders, apportion
