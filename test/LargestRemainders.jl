@@ -18,19 +18,24 @@
         304273,
         233349,
         83228,
+        29617,
         272093,
         82228,
+        61215,
         308219,
+        63091,
         825486,
         244664,
         104148
     ]
 
     expected_apportionment = [
-        48, 16, 12, 4, 14, 4, 16, 43, 13, 5
+        48, 16, 12, 4, 0, 14, 4, 0, 16, 0, 43, 13, 5
     ]
 
-    @test apportion(entitlements, LargestRemainders(175)) == expected_apportionment
-    @test apportion(float(entitlements), LargestRemainders(175)) == expected_apportionment
+    rule = ModifyingRule(RelativeThreshold(1//50), LargestRemainders(175))
+
+    @test apportion(entitlements, rule) == expected_apportionment
+    @test apportion(float(entitlements), rule) == expected_apportionment
 
 end
