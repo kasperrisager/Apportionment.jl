@@ -1,9 +1,16 @@
 @testset "Largest remainders" begin
     
     lr3 = LargestRemainders(3)
-    entitlements = [5.6, 2.6]
 
-    @test apportion(entitlements, lr3) == [2, 1]
+    @test apportion([5.6, 2.6], lr3) == [2, 1]
+    @test apportion([3.0, 3.0], lr3) == [2, 1] # uses LazyTieBreaker, so always chooses first
+
+    @test apportion([5, 3], lr3) == [2, 1]
+    @test apportion([3, 3], lr3) ∈ [[2, 1], [1, 2]] # uses ShuffleTieBreaker, so we don't know which
+
+    @test apportion([5+1//3, 3+5//13], lr3) == [2, 1]
+    @test apportion([5+1//3, 5+1//3], lr3) ∈ [[2, 1], [1, 2]] # uses ShuffleTieBreaker, so we don't know which
+
 
     # Danish general election 2019, only parties above threshold
     entitlements = [
@@ -24,5 +31,6 @@
     ]
 
     @test apportion(entitlements, LargestRemainders(175)) == expected_apportionment
+    @test apportion(float(entitlements), LargestRemainders(175)) == expected_apportionment
 
 end

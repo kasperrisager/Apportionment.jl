@@ -3,6 +3,9 @@ uuid = "b16ff44f-713d-4727-b6c3-8709e5be8a88"
 authors = ["Kasper Risager"]
 version = "0.1.0-DEV"
 
+[deps]
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
 [compat]
 julia = "1"
 
