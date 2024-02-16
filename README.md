@@ -18,3 +18,8 @@ As is evident, the package is currently under development.
      48
      16
      12
+    julia> apportion([915393, 304273, 233349], DivisorMethod(15, SainteLaguë()))
+    3-element Vector{Int64}:
+      10
+       3
+       2

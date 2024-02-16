@@ -1,4 +1,10 @@
-@testset "DHondt" begin
+@testset "Divisor methods" begin
+    
+    
+end
+
+
+@testset "Divisor methods integration" begin
     
     # 2019 election to the European Parliament, Belgium, Dutch speaking electoral college
 
@@ -18,11 +24,6 @@
     expected = [3, 3, 2, 2, 1, 1, 0, 0]
 
     @test apportion(entitlements, app_method) == expected
-end
-
-
-
-@testset "HuntingtonHill" begin
     
     # US House of Representatives, 2020 census
     entitlements = [
@@ -89,10 +90,7 @@ end
     ]
 
     @test apportion(entitlements, app_method) == expected
-end
 
-@testset "SainteLaguë" begin
-    
     # 2019 EP election in Latvia, excluding non-competitive parties
     entitlements = [
         124_193,
@@ -111,9 +109,6 @@ end
     expected = [2, 2, 2, 1, 1, 0, 0, 0, 0]
 
     @test apportion(entitlements, app_method) == expected
-end
-
-@testset "Modified Sainte-Laguë" begin
     
     # 2018 General election in Sweden, Malmö constituency.
     entitlements = [
