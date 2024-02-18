@@ -1,6 +1,12 @@
 @testset "Divisor methods" begin
     
+    dh2 = DivisorMethod(2, DHondt())
     
+    @test apportion([3.0, 2.0], dh2) == [1, 1]    
+    @test apportion([4.0, 2.0], dh2) == [2, 0] # Second seat is a tie, LazyTieBreaker assigns to first    
+    @test apportion([3, 2], dh2) == [1, 1]
+    @test apportion([4, 2], dh2) ∈ [[2, 0], [1, 1]] # Second seat is a tie, ShuffleTieBreaker assigns to either
+
 end
 
 
