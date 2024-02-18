@@ -42,11 +42,15 @@ function inverse_divisor(n::Integer, msl::ModifiedSainteLaguë)
 end
 
 function index_for_next_item(entitlements::AbstractVector{<:Real}, items, divisor_sequence)
-    return argmax(entitlements .* inverse_divisor.(items .+ 1, divisor_sequence))
+    return get_largest(entitlements .* inverse_divisor.(items .+ 1, divisor_sequence), LazyTieBreaker())
+end
+
+function index_for_next_item(entitlements::AbstractVector{<:Union{Integer, Rational}}, items, divisor_sequence::RationalDivisorSequence)
+    return get_largest(entitlements .* inverse_divisor.(items .+ 1, divisor_sequence), ShuffleTieBreaker())
 end
 
 function index_for_next_item(entitlements::AbstractVector{<:Union{Integer, Rational}}, items, divisor_sequence::HuntingtonHill)
-    return argmax(entitlements.^2 .* squared_inverse_divisor.(items .+ 1, divisor_sequence))
+    return get_largest(entitlements.^2 .* squared_inverse_divisor.(items .+ 1, divisor_sequence), ShuffleTieBreaker())
 end
 
 function apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod)
