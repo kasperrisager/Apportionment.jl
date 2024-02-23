@@ -8,12 +8,12 @@ This package aims to provide commonly used methods of [apportionment](https://en
 * Correct and auditable - for use in real-life political bodies
 * Performant - for use in stochastic simulation studies
 
-As is evident, the package is currently under development.
+As is evident, the package is currently under development. It currently supports most commonly encountered Largest Remainders and Divisor Methods, as well as thresholds.
 
 ## Usage
 
     julia> using Apportionment
-    julia> apportion([915393, 304273, 233349], LargestRemainders(76))
+    julia> apportion([915393, 304273, 233349], LargestRemainders(76, Hare()))
     3-element Vector{Int64}:
      48
      16
