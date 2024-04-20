@@ -2,10 +2,14 @@
     
     dh2 = DivisorMethod(2, DHondt())
     
-    @test apportion([3.0, 2.0], dh2) == [1, 1]    
+    @test apportion([3.0, 2.0], dh2) == [1, 1]
+    @test apportion_ordered([3.0, 2.0], dh2) == [1, 2]
     @test apportion([4.0, 2.0], dh2) == [2, 0] # Second seat is a tie, LazyTieBreaker assigns to first    
+    @test apportion_ordered([4.0, 2.0], dh2) == [1, 1] # Second seat is a tie, LazyTieBreaker assigns to first    
     @test apportion([3, 2], dh2) == [1, 1]
+    @test apportion_ordered([3, 2], dh2) == [1, 2]
     @test apportion([4, 2], dh2) ∈ [[2, 0], [1, 1]] # Second seat is a tie, ShuffleTieBreaker assigns to either
+    @test apportion_ordered([4, 2], dh2) ∈ [[1, 1], [1, 2]] # Second seat is a tie, ShuffleTieBreaker assigns to either
 
 end
 
@@ -28,8 +32,10 @@ end
     app_method = DivisorMethod(12, DHondt())
 
     expected = [3, 3, 2, 2, 1, 1, 0, 0]
+    expected_order = [1, 2, 3, 4, 5, 1, 6, 2, 3, 1, 4, 2]
 
     @test apportion(entitlements, app_method) == expected
+    @test apportion_ordered(entitlements, app_method) == expected_order
     
     # US House of Representatives, 2020 census
     entitlements = [
@@ -96,18 +102,19 @@ end
     ]
 
     @test apportion(entitlements, app_method) == expected
+    @test length(apportion_ordered(entitlements, app_method)) == 435 - 50
 
     # 2019 EP election in Latvia, excluding non-competitive parties
     entitlements = [
         124_193,
-        82_604,
-        77_591,
-        58_763,
-        29_546,
-        25_252,
-        23_581,
-        20_595,
-        13_705
+         82_604,
+         77_591,
+         58_763,
+         29_546,
+         25_252,
+         23_581,
+         20_595,
+         13_705
     ]
 
     app_method = DivisorMethod(8, SainteLaguë())

@@ -7,7 +7,7 @@ include("Modifiers.jl")
 include("LargestRemainders.jl")
 include("DivisorMethods.jl")
 
-export apportion
+export apportion, apportion_ordered
 export ModifyingRule, RelativeThreshold, AbsoluteThreshold
 export LargestRemainders, Hare, IntegerHare, IntegerDroop
 export DivisorMethod, DHondt, SainteLaguë, HuntingtonHill, ModifiedSainteLaguë
