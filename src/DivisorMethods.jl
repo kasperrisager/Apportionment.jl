@@ -3,8 +3,6 @@ struct DivisorMethod
     divisor_sequence
 end
 
-
-
 abstract type RationalDivisorSequence end
 Base.broadcastable(o::RationalDivisorSequence) = Ref(o)
 
@@ -41,24 +39,51 @@ function inverse_divisor(n::Integer, msl::ModifiedSainteLaguë)
     return n == 1 ? 1 // msl.first : 1 // (2n - 1)
 end
 
-function index_for_next_item(entitlements::AbstractVector{<:Real}, items, divisor_sequence)
+function index_for_next_item(items, entitlements::AbstractVector{<:Real}, divisor_sequence)
     return get_largest(entitlements .* inverse_divisor.(items .+ 1, divisor_sequence), LazyTieBreaker())
 end
 
-function index_for_next_item(entitlements::AbstractVector{<:Union{Integer, Rational}}, items, divisor_sequence::RationalDivisorSequence)
+function index_for_next_item(items, entitlements::AbstractVector{<:Union{Integer, Rational}}, divisor_sequence::RationalDivisorSequence)
     return get_largest(entitlements .* inverse_divisor.(items .+ 1, divisor_sequence), ShuffleTieBreaker())
 end
 
-function index_for_next_item(entitlements::AbstractVector{<:Union{Integer, Rational}}, items, divisor_sequence::HuntingtonHill)
+function index_for_next_item(items, entitlements::AbstractVector{<:Union{Integer, Rational}}, divisor_sequence::HuntingtonHill)
     return get_largest(entitlements.^2 .* squared_inverse_divisor.(items .+ 1, divisor_sequence), ShuffleTieBreaker())
 end
 
-function apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod)
+function increment!(items, entitlements, divisor_sequence)
+    next_idx = index_for_next_item(items, entitlements, divisor_sequence)
+    items[next_idx] += 1
+    return next_idx
+end
+
+function apportion_ordered(entitlements::AbstractVector{<:Real}, method::DivisorMethod, initial_items::AbstractVector{<:Integer})
     divisor_sequence = method.divisor_sequence
-    items = fill(minimum_items(divisor_sequence), length(entitlements))
-    for m in (sum(items) + 1):method.total_items
-        items[index_for_next_item(entitlements, items, divisor_sequence)] += 1
+    items = initial_items
+    remaining_items = method.total_items - sum(initial_items)
+    apportionment_order = Vector{Int}(undef, remaining_items)
+    for m in 1:remaining_items
+        apportionment_order[m] = increment!(items, entitlements, divisor_sequence)
+    end
+    return apportionment_order
+end
+
+function apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod, initial_items::AbstractVector{<:Integer})
+    divisor_sequence = method.divisor_sequence
+    items = initial_items
+    remaining_items = method.total_items - sum(initial_items)
+    for m in 1:remaining_items
+        increment!(items, entitlements, divisor_sequence)
     end
     return items
 end
 
+function apportion_ordered(entitlements::AbstractVector{<:Real}, method::DivisorMethod)
+    initial_items = fill(minimum_items(method.divisor_sequence), length(entitlements))
+    return apportion_ordered(entitlements, method, initial_items)
+end
+
+function apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod)
+    initial_items = fill(minimum_items(method.divisor_sequence), length(entitlements))
+    return apportion(entitlements, method, initial_items)
+end
