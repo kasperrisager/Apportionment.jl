@@ -1,6 +1,7 @@
 # Apportionment
 
 [![Build Status](https://github.com/kasperrisager/Apportionment.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/kasperrisager/Apportionment.jl/actions/workflows/CI.yml?query=branch%3Amaster)
+[![codecov](https://codecov.io/github/kasperrisager/Apportionment.jl/graph/badge.svg?token=QJF2U8JTRA)](https://codecov.io/github/kasperrisager/Apportionment.jl)
 
 This package aims to provide commonly used methods of [apportionment](https://en.wikipedia.org/wiki/Mathematics_of_apportionment) for allocating seats in political bodies according to votes and/or census data. The methods provided should be
 * Versatile - fully configurable rules
