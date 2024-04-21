@@ -1,20 +1,52 @@
+"""
+    DivisorMethod(total_items, divisor_sequence)
+
+A divisor method for apportionment.
+
+# Arguments
+- `total_items`: items to be apportioned.
+- `divisor_sequence`: object specifying the sequence of divisors to use.
+"""
 struct DivisorMethod
     total_items
     divisor_sequence
 end
 
+
 abstract type RationalDivisorSequence end
 Base.broadcastable(o::RationalDivisorSequence) = Ref(o)
 
+"""
+    DHondt()
+
+The d'Hondt divisor sequence, `1, 2, 3, ...`.
+"""
 struct DHondt <: RationalDivisorSequence end
+
+"""
+    SainteLaguë()
+
+The Sainte-Laguë divisor sequence, `1, 3, 5, ...`.
+"""
 struct SainteLaguë <: RationalDivisorSequence end
+
+"""
+    ModifiedSainteLaguëSainteLaguë(first::Union{Integer, Rational})
+
+The modified Sainte-Laguë divisor sequence, `first, 3, 5, 7, ...`, where `first` is a parameter.
+"""
 struct ModifiedSainteLaguë <: RationalDivisorSequence
     first::Union{Integer, Rational}
 end
 
+"""
+    HuntingtonHill()
+
+The Huntington-Hill divisor sequence, `0, sqrt(1 * 2), sqrt(2 * 3), sqrt(3 * 4), ...`, where it is implied
+that all agents receive at least one item.
+"""
 struct HuntingtonHill end
 Base.broadcastable(o::HuntingtonHill) = Ref(o)
-
 
 minimum_items(::Any) = 0
 minimum_items(::HuntingtonHill) = 1
@@ -57,6 +89,16 @@ function increment!(items, entitlements, divisor_sequence)
     return next_idx
 end
 
+"""
+    apportion_ordered(entitlements::AbstractVector{<:Real}, method::DivisorMethod[, initial_items::AbstractVector{<:Integer}])
+
+Apportion based on entitlements and a divisor method, reporting the order in which items are apportioned.
+
+# Arguments
+- `entitlements`: relative amounts that the agents are entitled to.
+- `method`: divisor method to apportion according to.
+- `initial_items`: Optional: items already allocated, default is 0 for each agent, except for `HuntingtonHill`, where it is 1. 
+"""
 function apportion_ordered(entitlements::AbstractVector{<:Real}, method::DivisorMethod, initial_items::AbstractVector{<:Integer})
     divisor_sequence = method.divisor_sequence
     items = initial_items
@@ -68,6 +110,12 @@ function apportion_ordered(entitlements::AbstractVector{<:Real}, method::Divisor
     return apportionment_order
 end
 
+"""
+    apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod[, initial_items::AbstractVector{<:Integer}])
+
+when using a divisor `method`, one can optionally specify `initial_items` that are already apportioned to each agent.
+Default is 0 for each agent, except for `HuntingtonHill`, where it is 1. 
+"""
 function apportion(entitlements::AbstractVector{<:Real}, method::DivisorMethod, initial_items::AbstractVector{<:Integer})
     divisor_sequence = method.divisor_sequence
     items = initial_items
