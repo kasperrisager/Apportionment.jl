@@ -38,4 +38,13 @@
     @test apportion(entitlements, rule) == expected_apportionment
     @test apportion(float(entitlements), rule) == expected_apportionment
 
+    expected_integer_hare = [45, 15, 12, 4, 2, 14, 4, 3, 15, 3, 41, 12, 5]
+    expected_integer_droop = [46, 15, 12, 4, 1, 14, 4, 3, 15, 3, 41, 12, 5]
+
+    @test apportion(entitlements, LargestRemainders(175, IntegerHare())) == expected_integer_hare
+    @test apportion(float(entitlements), LargestRemainders(175, IntegerHare())) == expected_integer_hare
+
+    @test apportion(entitlements, LargestRemainders(175, IntegerDroop())) == expected_integer_droop
+    @test apportion(float(entitlements), LargestRemainders(175, IntegerDroop())) == expected_integer_droop
+
 end
