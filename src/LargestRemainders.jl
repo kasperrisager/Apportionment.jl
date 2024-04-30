@@ -39,7 +39,7 @@ function quota(entitlements::Union{Integer, Rational}, items, ::Hare)
 end
 
 function quota(entitlements, items, ::IntegerHare)
-    return ceil(Int, quota(items, entitlements, Hare()))
+    return ceil(Int, quota(entitlements, items, Hare()))
 end
 function quota(entitlements::Real, items, ::IntegerDroop)
     return floor(Int, 1 + entitlements / (1 + items))

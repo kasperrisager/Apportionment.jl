@@ -35,6 +35,7 @@ end
     expected_order = [1, 2, 3, 4, 5, 1, 6, 2, 3, 1, 4, 2]
 
     @test apportion(entitlements, app_method) == expected
+    @test apportion(float(entitlements), app_method) == expected
     @test apportion_ordered(entitlements, app_method) == expected_order
     
     # US House of Representatives, 2020 census
@@ -102,6 +103,7 @@ end
     ]
 
     @test apportion(entitlements, app_method) == expected
+    @test apportion(float(entitlements), app_method) == expected
     @test length(apportion_ordered(entitlements, app_method)) == 435 - 50
 
     # 2019 EP election in Latvia, excluding non-competitive parties
@@ -122,6 +124,7 @@ end
     expected = [2, 2, 2, 1, 1, 0, 0, 0, 0]
 
     @test apportion(entitlements, app_method) == expected
+    @test apportion(float(entitlements), app_method) == expected
     
     # 2018 General election in Sweden, Malmö constituency.
     entitlements = [
@@ -140,4 +143,5 @@ end
     expected = [3, 2, 2, 1, 1, 0, 1, 1]
 
     @test apportion(entitlements, app_method) == expected
+    @test apportion(float(entitlements), app_method) == expected
 end
